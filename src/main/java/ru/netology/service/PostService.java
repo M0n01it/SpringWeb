@@ -1,9 +1,9 @@
 package ru.netology.service;
 
+import org.springframework.stereotype.Service;
 import ru.netology.exception.NotFoundException;
 import ru.netology.model.Post;
 import ru.netology.repository.PostRepository;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -11,8 +11,9 @@ import java.util.List;
 public class PostService {
   private final PostRepository repository;
 
-  public PostService() {
-    this.repository = new PostRepository();
+  // Инъекция PostRepository через конструктор
+  public PostService(PostRepository repository) {
+    this.repository = repository;
   }
 
   public List<Post> all() {
@@ -20,7 +21,8 @@ public class PostService {
   }
 
   public Post getById(long id) {
-    return repository.getById(id).orElseThrow(() -> new NotFoundException("Пост с id " + id + " не найден."));
+    return repository.getById(id)
+            .orElseThrow(() -> new NotFoundException("Пост с id " + id + " не найден."));
   }
 
   public Post save(Post post) {
